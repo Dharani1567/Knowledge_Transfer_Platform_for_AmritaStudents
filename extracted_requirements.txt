@@ -1,0 +1,50 @@
+Class: B.Tech CSE
+Mentor: Sikha
+Proposed Project Title:
+Amrita Student Knowledge Sharing Platform
+Proposed Project Pillar:
+Education and Student Development
+
+1. Why this project and what's its sustainability?
+Every year, Amrita students gain valuable knowledge through academics, projects,
+internships, research activities, clubs, and placements.
+• Much of this information is lost when students graduate.
+• Juniors often struggle to find reliable resources and guidance related to courses,
+projects, internships, and placement preparation.
+• This project aims to create a centralized platform where Amrita students can share and
+access knowledge in an organized manner.
+• The platform can be continuously updated by future batches, making it sustainable and
+useful for years to come.
+• It will serve as a long-term knowledge repository for the Amrita student community.
+
+2. What are the benefits to society?
+• Promotes a culture of knowledge sharing and peer learning among students.
+• Provides equal access to educational and career-related resources.
+• Helps first-generation college students who may not have access to personal guidance
+networks.
+• Encourages collaboration instead of competition.
+• Reduces the gap between seniors and juniors by enabling experience sharing.
+• Contributes to building a stronger and more informed student community.
+
+3. What are the probable learnings for the team members?
+• Full-stack web development and software engineering practices.
+• Database management and system design.
+
+• UI/UX design and user-centered development.
+• Project planning, teamwork, and leadership skills.
+• Requirement analysis through interaction with students and faculty.
+• Documentation, testing, and maintenance of software applications.
+• Understanding how technology can be used to solve real educational challenges.
+
+4. How will this project help students in your placement process?
+• Students can access placement preparation materials shared by seniors.
+• Interview experiences from previous placement seasons can be documented and
+referred to.
+• Internship experiences and guidance can help students prepare earlier.
+• Resources for aptitude, coding, technical interviews, and HR interviews can be organized
+in one place.
+• Students can learn from successful placement journeys of Amrita alumni and seniors.
+• Better access to guidance and resources can improve placement readiness and
+confidence.
+
+
