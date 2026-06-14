@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Guidance from './pages/Guidance';
+import Admin from './pages/Admin';
 
 // Protected Route Gating Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -78,6 +79,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Guidance />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/admin" 
+                element={
+                  <ProtectedRoute>
+                    <Admin />
                   </ProtectedRoute>
                 } 
               />

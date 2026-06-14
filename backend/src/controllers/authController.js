@@ -36,14 +36,47 @@ const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Auto-classify role, batchYear, and department from student email format
+    let classifiedRole = role || 'student';
+    let classifiedBatchYear = Number(batchYear) || new Date().getFullYear();
+    let classifiedDept = department || 'CSE';
+
+    const username = email.split('@')[0].toLowerCase();
+    const studentMatch = username.match(/(u\d|p\d)[.-]?([a-z]+)(\d{2})\d+$/);
+    
+    if (studentMatch) {
+      const degree = studentMatch[1]; // 'u4', 'u3', 'p2'
+      const dept = studentMatch[2].toUpperCase(); // 'CSE'
+      const joinYearShort = parseInt(studentMatch[3], 10);
+      const joinYear = 2000 + joinYearShort;
+
+      let duration = 4;
+      if (degree === 'u3') duration = 3;
+      if (degree === 'p2') duration = 2;
+
+      const currentYear = new Date().getFullYear();
+      const yearsElapsed = currentYear - joinYear;
+
+      if (yearsElapsed >= duration) {
+        classifiedRole = 'alumni';
+      } else if (yearsElapsed >= 2) {
+        classifiedRole = 'senior';
+      } else {
+        classifiedRole = 'student';
+      }
+
+      classifiedBatchYear = joinYear + duration;
+      classifiedDept = dept;
+    }
+
     // Create user
     const user = await User.create({
       name,
       email,
       password: hashedPassword,
-      role: role || 'student',
-      department: department || '',
-      batchYear: Number(batchYear) || new Date().getFullYear()
+      role: classifiedRole,
+      department: classifiedDept,
+      batchYear: classifiedBatchYear
     });
 
     if (user) {

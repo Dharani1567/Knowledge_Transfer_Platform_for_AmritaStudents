@@ -10,6 +10,7 @@ const experienceRoutes = require('./routes/experienceRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const guidanceRoutes = require('./routes/guidanceRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/experiences', experienceRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/guidance', guidanceRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Base route / health check
 app.get('/', (req, res) => {

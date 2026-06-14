@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Home, BookOpen, Briefcase, FolderGit, User, LogOut, Award, Compass } from 'lucide-react';
+import { Home, BookOpen, Briefcase, FolderGit, User, LogOut, Award, Compass, Shield } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -42,13 +42,17 @@ const Navbar = () => {
                 <FolderGit size={18} />
                 <span>Projects</span>
               </NavLink>
-
-
-
               <NavLink to="/guidance" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                 <Compass size={18} />
                 <span>Guidance</span>
               </NavLink>
+
+              {user?.role === 'admin' && (
+                <NavLink to="/admin" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+                  <Shield size={18} />
+                  <span>Admin</span>
+                </NavLink>
+              )}
             </>
           )}
         </div>

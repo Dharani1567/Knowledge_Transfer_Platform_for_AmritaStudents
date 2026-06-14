@@ -11,6 +11,10 @@ const getResources = async (req, res) => {
     query.category = category;
   }
 
+  if (req.user.role !== 'admin') {
+    query.status = 'approved';
+  }
+
   try {
     let resources = await Resource.find(query).populate('uploadedBy', 'name email role');
 
@@ -74,7 +78,7 @@ const createResource = async (req, res) => {
       description: description || '',
       fileUrl,
       uploadedBy: req.user._id,
-      status: 'approved', // Auto-approved for this prototype
+      status: req.user.role === 'admin' ? 'approved' : 'pending',
       ratings: [],
       bookmarks: []
     });

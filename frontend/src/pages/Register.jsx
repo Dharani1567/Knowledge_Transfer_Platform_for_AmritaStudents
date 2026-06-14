@@ -14,14 +14,49 @@ const Register = () => {
   });
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState('');
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
   const { register, error } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    let updatedData = { ...formData, [name]: value };
+
+    if (name === 'email') {
+      const username = value.split('@')[0].toLowerCase();
+      const studentMatch = username.match(/(u\d|p\d)[.-]?([a-z]+)(\d{2})\d+$/);
+      if (studentMatch) {
+        setIsAutoFilled(true);
+        const degree = studentMatch[1];
+        const dept = studentMatch[2].toUpperCase();
+        const joinYearShort = parseInt(studentMatch[3], 10);
+        const joinYear = 2000 + joinYearShort;
+
+        let duration = 4;
+        if (degree === 'u3') duration = 3;
+        if (degree === 'p2') duration = 2;
+
+        const currentYear = new Date().getFullYear();
+        const yearsElapsed = currentYear - joinYear;
+
+        let role = 'student';
+        if (yearsElapsed >= duration) {
+          role = 'alumni';
+        } else if (yearsElapsed >= 2) {
+          role = 'senior';
+        }
+
+        updatedData.role = role;
+        updatedData.batchYear = joinYear + duration;
+        if (['CSE', 'AIE', 'ECE', 'MECH', 'CIVIL'].includes(dept)) {
+          updatedData.department = dept;
+        }
+      } else {
+        setIsAutoFilled(false);
+      }
+    }
+
+    setFormData(updatedData);
   };
 
   const handleSubmit = async (e) => {
@@ -100,11 +135,13 @@ const Register = () => {
                 className="form-control"
                 value={formData.role}
                 onChange={handleChange}
+                disabled={isAutoFilled}
               >
                 <option value="student">Student (Junior)</option>
                 <option value="senior">Senior Student</option>
                 <option value="alumni">Amrita Alumni</option>
               </select>
+              {isAutoFilled && <span className="autofill-info">✓ Auto-classified</span>}
             </div>
 
             <div className="form-group">
@@ -114,6 +151,7 @@ const Register = () => {
                 className="form-control"
                 value={formData.department}
                 onChange={handleChange}
+                disabled={isAutoFilled}
               >
                 <option value="CSE">CSE</option>
                 <option value="AIE">AIE (AI)</option>
@@ -121,6 +159,7 @@ const Register = () => {
                 <option value="MECH">MECH</option>
                 <option value="CIVIL">CIVIL</option>
               </select>
+              {isAutoFilled && <span className="autofill-info">✓ Auto-detected</span>}
             </div>
           </div>
 
@@ -138,8 +177,10 @@ const Register = () => {
                 value={formData.batchYear}
                 onChange={handleChange}
                 required
+                disabled={isAutoFilled}
               />
             </div>
+            {isAutoFilled && <span className="autofill-info">✓ Calculated from roll number</span>}
           </div>
 
           <div className="form-group">
@@ -271,6 +312,21 @@ const Register = () => {
 
         .auth-link:hover {
           text-decoration: underline;
+        }
+
+        .autofill-info {
+          font-size: 0.75rem;
+          color: var(--color-success);
+          display: block;
+          margin-top: 0.25rem;
+          font-weight: 500;
+        }
+
+        .form-control:disabled {
+          background: rgba(255, 255, 255, 0.02);
+          border-color: rgba(255, 255, 255, 0.05);
+          color: var(--text-muted);
+          cursor: not-allowed;
         }
 
         @media (max-width: 480px) {

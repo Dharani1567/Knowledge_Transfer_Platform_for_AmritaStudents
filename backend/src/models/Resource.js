@@ -19,7 +19,7 @@ const resourceSchema = new mongoose.Schema(
     status: { 
       type: String, 
       enum: ['pending', 'approved', 'rejected'], 
-      default: 'approved' // Automatically approved for easy prototype testing
+      default: 'pending'
     },
     ratings: [
       {
