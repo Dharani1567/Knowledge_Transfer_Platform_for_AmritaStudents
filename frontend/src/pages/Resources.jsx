@@ -213,16 +213,19 @@ const Resources = () => {
         </div>
 
         <div className="category-tabs">
-          {['all', 'notes', 'exam_paper', 'assignment'].map((cat) => (
+          {['all', 'notes', 'exam_paper', 'assignment', 'lab_resource', 'study_plan', 'exam_tip'].map((cat) => (
             <button
               key={cat}
               className={`cat-tab ${category === cat ? 'active' : ''}`}
               onClick={() => setCategory(cat)}
             >
-              {cat === 'all' && 'All Resources'}
-              {cat === 'notes' && 'Lecture Notes'}
-              {cat === 'exam_paper' && 'Question Papers'}
+              {cat === 'all' && 'All'}
+              {cat === 'notes' && 'Notes'}
+              {cat === 'exam_paper' && 'PYQs'}
               {cat === 'assignment' && 'Assignments'}
+              {cat === 'lab_resource' && 'Lab Resources'}
+              {cat === 'study_plan' && 'Study Plans'}
+              {cat === 'exam_tip' && 'Exam Tips'}
             </button>
           ))}
         </div>
@@ -246,10 +249,16 @@ const Resources = () => {
                 <div className="card-top">
                   <span className={`badge ${
                     res.category === 'notes' ? 'badge-red' : 
-                    res.category === 'exam_paper' ? 'badge-gold' : 'badge-blue'
+                    res.category === 'exam_paper' ? 'badge-gold' : 
+                    res.category === 'assignment' ? 'badge-blue' :
+                    res.category === 'lab_resource' ? 'badge-green' :
+                    res.category === 'study_plan' ? 'badge-purple' : 'badge-pink'
                   }`}>
                     {res.category === 'notes' ? 'Notes' : 
-                     res.category === 'exam_paper' ? 'Exam Paper' : 'Assignment'}
+                     res.category === 'exam_paper' ? 'PYQ' : 
+                     res.category === 'assignment' ? 'Assignment' :
+                     res.category === 'lab_resource' ? 'Lab' :
+                     res.category === 'study_plan' ? 'Study Plan' : 'Exam Tip'}
                   </span>
                   <button className={`bookmark-btn ${isBookmarked ? 'active' : ''}`} onClick={(e) => handleBookmark(res._id, e)}>
                     <Bookmark size={16} fill={isBookmarked ? 'currentColor' : 'none'} />
@@ -310,8 +319,11 @@ const Resources = () => {
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   >
                     <option value="notes">Lecture Notes</option>
-                    <option value="exam_paper">Question Paper</option>
+                    <option value="exam_paper">Question Paper (PYQ)</option>
                     <option value="assignment">Assignment Solution</option>
+                    <option value="lab_resource">Lab Resource</option>
+                    <option value="study_plan">Study Plan / Playlist</option>
+                    <option value="exam_tip">Exam / Faculty Tip</option>
                   </select>
                 </div>
 

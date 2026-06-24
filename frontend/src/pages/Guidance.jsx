@@ -124,7 +124,7 @@ const Guidance = () => {
         </div>
 
         <div className="category-tabs">
-          {['all', 'first_year', 'placement_prep', 'general_advice'].map((cat) => (
+          {['all', 'first_year', 'placement_prep', 'general_advice', 'clubs_campus'].map((cat) => (
             <button
               key={cat}
               className={`cat-tab ${category === cat ? 'active' : ''}`}
@@ -134,6 +134,7 @@ const Guidance = () => {
               {cat === 'first_year' && 'First-Year Guides'}
               {cat === 'placement_prep' && 'Placement Prep'}
               {cat === 'general_advice' && 'General Advice'}
+              {cat === 'clubs_campus' && 'Clubs & Campus Life'}
             </button>
           ))}
         </div>
@@ -155,10 +156,12 @@ const Guidance = () => {
               <div className="card-top">
                 <span className={`badge ${
                   art.category === 'first_year' ? 'badge-green' :
-                  art.category === 'placement_prep' ? 'badge-red' : 'badge-gold'
+                  art.category === 'placement_prep' ? 'badge-red' : 
+                  art.category === 'clubs_campus' ? 'badge-purple' : 'badge-gold'
                 }`}>
                   {art.category === 'first_year' ? 'First Year' :
-                   art.category === 'placement_prep' ? 'Placement' : 'General'}
+                   art.category === 'placement_prep' ? 'Placement' : 
+                   art.category === 'clubs_campus' ? 'Clubs & Life' : 'General'}
                 </span>
                 <Compass className="card-top-icon" size={18} />
               </div>
@@ -221,6 +224,7 @@ const Guidance = () => {
                     <option value="first_year">First-Year Guide</option>
                     <option value="placement_prep">Placement Prep Map</option>
                     <option value="general_advice">General College Advice</option>
+                    <option value="clubs_campus">Clubs & Campus Life</option>
                   </select>
                 </div>
 
@@ -253,8 +257,9 @@ const Guidance = () => {
             <div className="drawer-header">
               <span className={`badge ${
                 selectedArticle.category === 'first_year' ? 'badge-green' :
-                selectedArticle.category === 'placement_prep' ? 'badge-red' : 'badge-gold'
-              }`}>{selectedArticle.category}</span>
+                selectedArticle.category === 'placement_prep' ? 'badge-red' : 
+                selectedArticle.category === 'clubs_campus' ? 'badge-purple' : 'badge-gold'
+              }`}>{selectedArticle.category.replace('_', ' ')}</span>
               <button className="close-btn" onClick={() => setSelectedArticle(null)}><X size={20} /></button>
             </div>
 

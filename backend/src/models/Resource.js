@@ -5,7 +5,7 @@ const resourceSchema = new mongoose.Schema(
     title: { type: String, required: true },
     category: { 
       type: String, 
-      enum: ['notes', 'assignment', 'exam_paper'], 
+      enum: ['notes', 'assignment', 'exam_paper', 'lab_resource', 'study_plan', 'exam_tip'], 
       required: true 
     },
     courseCode: { type: String, required: true },

@@ -30,12 +30,12 @@ const Navbar = () => {
             <>
               <NavLink to="/resources" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                 <BookOpen size={18} />
-                <span>Resources</span>
+                <span>Academics</span>
               </NavLink>
 
               <NavLink to="/experiences" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                 <Briefcase size={18} />
-                <span>Careers</span>
+                <span>Placements</span>
               </NavLink>
 
               <NavLink to="/projects" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
@@ -44,7 +44,7 @@ const Navbar = () => {
               </NavLink>
               <NavLink to="/guidance" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
                 <Compass size={18} />
-                <span>Guidance</span>
+                <span>Guidance & Clubs</span>
               </NavLink>
 
               {user?.role === 'admin' && (

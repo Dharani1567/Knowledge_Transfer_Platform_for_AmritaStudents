@@ -259,6 +259,18 @@ select.form-control {
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
+.badge-purple {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.badge-pink {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }

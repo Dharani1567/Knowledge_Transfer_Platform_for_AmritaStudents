@@ -11,7 +11,7 @@ const guidanceSchema = new mongoose.Schema(
     },
     category: { 
       type: String, 
-      enum: ['first_year', 'placement_prep', 'general_advice'], 
+      enum: ['first_year', 'placement_prep', 'general_advice', 'clubs_campus'], 
       default: 'general_advice' 
     }
   },
