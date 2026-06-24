@@ -46,6 +46,13 @@ const Resources = () => {
     fetchResources();
   }, [category, search]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('upload') === 'true' && user) {
+      setIsUploadOpen(true);
+    }
+  }, [user]);
+
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
     try {
