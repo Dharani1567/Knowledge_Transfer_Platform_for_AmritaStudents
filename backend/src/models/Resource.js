@@ -9,6 +9,12 @@ const resourceSchema = new mongoose.Schema(
       required: true 
     },
     courseCode: { type: String, required: true },
+    subject: { type: String, default: '' },
+    department: { type: String, default: '' },
+    semester: { type: String, default: '' },
+    isAnonymous: { type: Boolean, default: false },
+    batchYear: { type: Number },
+    tags: [{ type: String }],
     description: { type: String, default: '' },
     fileUrl: { type: String, required: true },
     uploadedBy: { 
@@ -18,9 +24,10 @@ const resourceSchema = new mongoose.Schema(
     },
     status: { 
       type: String, 
-      enum: ['pending', 'approved', 'rejected'], 
+      enum: ['pending', 'approved', 'rejected', 'archived'], 
       default: 'pending'
     },
+    lastVerifiedAt: { type: Date, default: Date.now },
     ratings: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

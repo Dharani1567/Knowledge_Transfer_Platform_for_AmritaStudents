@@ -64,7 +64,19 @@ const getResourceById = async (req, res) => {
 // @route   POST /api/resources
 // @access  Private
 const createResource = async (req, res) => {
-  const { title, category, courseCode, description, fileUrl } = req.body;
+  const { 
+    title, 
+    category, 
+    courseCode, 
+    subject,
+    department,
+    semester,
+    isAnonymous,
+    batchYear,
+    tags,
+    description, 
+    fileUrl 
+  } = req.body;
 
   try {
     if (!title || !category || !courseCode || !fileUrl) {
@@ -75,12 +87,19 @@ const createResource = async (req, res) => {
       title,
       category,
       courseCode,
+      subject: subject || '',
+      department: department || '',
+      semester: semester || '',
+      isAnonymous: isAnonymous === true || isAnonymous === 'true',
+      batchYear: Number(batchYear) || req.user.batchYear || new Date().getFullYear(),
+      tags: Array.isArray(tags) ? tags : (typeof tags === 'string' ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
       description: description || '',
       fileUrl,
       uploadedBy: req.user._id,
       status: req.user.role === 'admin' ? 'approved' : 'pending',
       ratings: [],
-      bookmarks: []
+      bookmarks: [],
+      lastVerifiedAt: new Date()
     });
 
     res.status(201).json(resource);

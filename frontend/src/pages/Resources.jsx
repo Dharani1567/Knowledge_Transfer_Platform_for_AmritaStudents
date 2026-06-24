@@ -21,9 +21,25 @@ const Resources = () => {
     title: '',
     category: 'notes',
     courseCode: '',
+    subject: '',
+    department: '',
+    semester: 'S1',
+    isAnonymous: false,
+    batchYear: '',
+    tags: '',
     description: '',
-    fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' // Pre-populated for easy testing
+    fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        department: prev.department || user.department || 'CSE',
+        batchYear: prev.batchYear || user.batchYear || new Date().getFullYear()
+      }));
+    }
+  }, [user]);
 
   // Comments state
   const [newComment, setNewComment] = useState('');
@@ -77,6 +93,12 @@ const Resources = () => {
           title: '',
           category: 'notes',
           courseCode: '',
+          subject: '',
+          department: user?.department || 'CSE',
+          semester: 'S1',
+          isAnonymous: false,
+          batchYear: user?.batchYear || new Date().getFullYear(),
+          tags: '',
           description: '',
           fileUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
         });
@@ -340,6 +362,75 @@ const Resources = () => {
                 </div>
               </div>
 
+              <div className="grid-2-col">
+                <div className="form-group">
+                  <label className="form-label">Subject / Topic Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. Compiler Design"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Department</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="e.g. CSE"
+                    value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid-2-col">
+                <div className="form-group">
+                  <label className="form-label">Year / Semester</label>
+                  <select
+                    className="form-control"
+                    value={formData.semester}
+                    onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
+                  >
+                    <option value="S1">Semester 1 (S1)</option>
+                    <option value="S2">Semester 2 (S2)</option>
+                    <option value="S3">Semester 3 (S3)</option>
+                    <option value="S4">Semester 4 (S4)</option>
+                    <option value="S5">Semester 5 (S5)</option>
+                    <option value="S6">Semester 6 (S6)</option>
+                    <option value="S7">Semester 7 (S7)</option>
+                    <option value="S8">Semester 8 (S8)</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Senior / Batch Year</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="e.g. 2026"
+                    value={formData.batchYear}
+                    onChange={(e) => setFormData({ ...formData, batchYear: e.target.value })}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Tags (comma-separated)</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. midsem, coding, reference, lab"
+                  value={formData.tags}
+                  onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                />
+              </div>
+
               <div className="form-group">
                 <label className="form-label">Description (Optional)</label>
                 <textarea
@@ -362,6 +453,18 @@ const Resources = () => {
                 />
               </div>
 
+              <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '1rem 0' }}>
+                <input
+                  type="checkbox"
+                  id="isAnonymous"
+                  checked={formData.isAnonymous}
+                  onChange={(e) => setFormData({ ...formData, isAnonymous: e.target.checked })}
+                />
+                <label htmlFor="isAnonymous" className="form-label" style={{ margin: 0, cursor: 'pointer', fontSize: '0.9rem', fontWeight: 500 }}>
+                  Post anonymously (hides your name from other students)
+                </label>
+              </div>
+
               <div className="modal-actions">
                 <button type="button" className="btn btn-secondary" onClick={() => setIsUploadOpen(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Publish Resource</button>
@@ -381,14 +484,40 @@ const Resources = () => {
             </div>
 
             <h2 className="drawer-title">{selectedResource.title}</h2>
-            <div className="drawer-course">{selectedResource.courseCode}</div>
+            <div className="drawer-course" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', margin: '0.25rem 0' }}>
+              <span className="course-code-badge">{selectedResource.courseCode}</span>
+              {selectedResource.subject && <span className="badge-small">{selectedResource.subject}</span>}
+              {selectedResource.semester && <span className="badge-small">{selectedResource.semester}</span>}
+              {selectedResource.department && <span className="badge-small">{selectedResource.department}</span>}
+            </div>
 
             <p className="drawer-desc">{selectedResource.description || 'No description available.'}</p>
 
-            <div className="drawer-meta-grid">
+            {/* Tags display */}
+            {selectedResource.tags && selectedResource.tags.length > 0 && (
+              <div className="tags-display" style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', margin: '0.5rem 0' }}>
+                {selectedResource.tags.map((tag, i) => (
+                  <span key={i} className="badge-small" style={{ fontSize: '0.75rem', background: 'rgba(255,255,255,0.06)' }}>#{tag}</span>
+                ))}
+              </div>
+            )}
+
+            <div className="drawer-meta-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
               <div className="meta-box">
                 <span className="meta-title">Uploaded By</span>
-                <span className="meta-value">{selectedResource.uploadedBy?.name || 'Anonymous'} ({selectedResource.uploadedBy?.role})</span>
+                <span className="meta-value">
+                  {selectedResource.isAnonymous 
+                    ? 'Anonymous Student' 
+                    : `${selectedResource.uploadedBy?.name || 'Amrita Student'} (${selectedResource.uploadedBy?.role || 'Senior'})`}
+                </span>
+              </div>
+              <div className="meta-box">
+                <span className="meta-title">Senior Year / Batch</span>
+                <span className="meta-value">{selectedResource.batchYear || 'N/A'}</span>
+              </div>
+              <div className="meta-box">
+                <span className="meta-title">Verified Date</span>
+                <span className="meta-value">{selectedResource.lastVerifiedAt ? new Date(selectedResource.lastVerifiedAt).toLocaleDateString() : new Date(selectedResource.createdAt).toLocaleDateString()}</span>
               </div>
               <div className="meta-box">
                 <span className="meta-title">Rating</span>
