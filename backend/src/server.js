@@ -1,4 +1,9 @@
 require('dotenv').config();
+// Polyfill global crypto for Node 18 compatibility with modern mongoose/mongodb driver
+const { webcrypto } = require('node:crypto');
+if (!global.crypto) {
+  global.crypto = webcrypto;
+}
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
