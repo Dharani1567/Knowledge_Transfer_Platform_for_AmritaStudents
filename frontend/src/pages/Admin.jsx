@@ -14,6 +14,7 @@ const Admin = () => {
   const [resourcesList, setResourcesList] = useState([]);
   const [projectsList, setProjectsList] = useState([]);
   const [experiencesList, setExperiencesList] = useState([]);
+  const [guidanceList, setGuidanceList] = useState([]);
   
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingResources, setLoadingResources] = useState(true);
@@ -82,6 +83,15 @@ const Admin = () => {
       if (resExp.ok) {
         const eData = await resExp.json();
         setExperiencesList(eData);
+      }
+
+      // Fetch guidance articles
+      const resGuidance = await fetch(`${API_BASE}/guidance`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (resGuidance.ok) {
+        const gData = await resGuidance.json();
+        setGuidanceList(gData);
       }
     } catch (err) {
       console.error('Fetch other content error:', err);
@@ -207,6 +217,24 @@ const Admin = () => {
 
       if (res.ok) {
         setSuccessMsg('Experience log deleted successfully.');
+        setTimeout(() => setSuccessMsg(''), 3000);
+        fetchOtherContent();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDeleteGuidance = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this guidance article? This action is permanent.')) return;
+    try {
+      const res = await fetch(`${API_BASE}/guidance/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        setSuccessMsg('Guidance article deleted successfully.');
         setTimeout(() => setSuccessMsg(''), 3000);
         fetchOtherContent();
       }
@@ -511,6 +539,30 @@ const Admin = () => {
                             onClick={() => handleDeleteExperience(e._id)}
                           >
                             <Trash2 size={14} /> Delete Journal
+                          </button>
+                        </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Guidance list */}
+                <div className="purge-section">
+                  <h3>Guidance Articles ({guidanceList.length})</h3>
+                  <div className="purge-cards">
+                    {guidanceList
+                      .filter(g => g.title.toLowerCase().includes(searchQuery.toLowerCase()) || g.content.toLowerCase().includes(searchQuery.toLowerCase()))
+                      .slice(0, 10)
+                      .map(g => (
+                        <div key={g._id} className="purge-card glass-card">
+                          <div className="purge-meta">
+                            <span className="badge-small">{g.category.replace('_', ' ')}</span>
+                          </div>
+                          <h4>{g.title}</h4>
+                          <button 
+                            className="btn btn-danger btn-small w-full"
+                            onClick={() => handleDeleteGuidance(g._id)}
+                          >
+                            <Trash2 size={14} /> Delete Article
                           </button>
                         </div>
                     ))}

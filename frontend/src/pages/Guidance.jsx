@@ -66,6 +66,27 @@ const Guidance = () => {
     }
   };
 
+  const handleDeleteArticle = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this guidance article? This action is permanent.')) return;
+    try {
+      const res = await fetch(`${API_BASE}/guidance/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        setSelectedArticle(null);
+        fetchArticles();
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Failed to delete article');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const isJunior = user?.role === 'student';
 
   return (
@@ -261,6 +282,16 @@ const Guidance = () => {
                 <span className="meta-value">{new Date(selectedArticle.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
+
+            { (user?.role === 'admin' || selectedArticle.author?._id === user?._id) && (
+              <button 
+                className="btn btn-danger w-full" 
+                style={{ marginBottom: '0.75rem' }}
+                onClick={() => handleDeleteArticle(selectedArticle._id)}
+              >
+                Delete Article
+              </button>
+            )}
 
             <button className="btn btn-secondary w-full" onClick={() => setSelectedArticle(null)}>Close Article</button>
           </div>
