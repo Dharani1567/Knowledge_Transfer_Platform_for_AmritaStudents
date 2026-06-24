@@ -1,20 +1,30 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen, Briefcase, FolderGit, ArrowRight, 
   Shield, Globe, Award, HelpCircle, Users, 
-  RefreshCw, UploadCloud, Compass, CheckCircle2 
+  RefreshCw, UploadCloud, Compass, CheckCircle2,
+  Search, FileText
 } from 'lucide-react';
 
 const Home = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchVal, setSearchVal] = useState('');
 
   const metrics = [
     { label: 'Academic Resources', count: '250+', icon: <BookOpen className="metric-icon" /> },
     { label: 'Interview Journals', count: '80+', icon: <Briefcase className="metric-icon" /> },
     { label: 'Project Handovers', count: '40+', icon: <FolderGit className="metric-icon" /> }
   ];
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchVal.trim()) {
+      navigate(`/resources?search=${encodeURIComponent(searchVal.trim())}`);
+    }
+  };
 
   const faqQuestions = [
     {
@@ -64,6 +74,23 @@ const Home = () => {
           <p className="hero-subtitle">
             Find subject-wise resources, placement prep, project handovers, and verified student contributions in one place.
           </p>
+
+          {/* Quick Search Console */}
+          <form onSubmit={handleSearchSubmit} className="hero-search-form">
+            <div className="hero-search-input-wrapper">
+              <Search className="hero-search-icon" size={20} />
+              <input
+                type="text"
+                placeholder="Search subject resources... (e.g. DBMS, OS, Data Structures)"
+                value={searchVal}
+                onChange={(e) => setSearchVal(e.target.value)}
+                className="hero-search-field"
+              />
+              <button type="submit" className="btn btn-primary hero-search-btn">
+                Search
+              </button>
+            </div>
+          </form>
           
           <div className="hero-cta-group">
             {/* Primary CTAs */}
@@ -84,6 +111,31 @@ const Home = () => {
               <span className="cta-divider">|</span>
               <Link to="/experiences" className="btn-link-sec">
                 See placement prep &rarr;
+              </Link>
+            </div>
+          </div>
+
+          {/* Top Shortcuts Quick Actions */}
+          <div className="shortcuts-container">
+            <span className="shortcuts-label">Top Shortcuts</span>
+            <div className="shortcuts-grid">
+              <Link to="/resources?category=notes" className="shortcut-btn glass-card">
+                <BookOpen size={15} /> Semester Resources
+              </Link>
+              <Link to="/resources?category=exam_paper" className="shortcut-btn glass-card">
+                <FileText size={15} /> PYQs (Exam Papers)
+              </Link>
+              <Link to="/experiences" className="shortcut-btn glass-card">
+                <Briefcase size={15} /> Placement Prep
+              </Link>
+              <Link to="/projects" className="shortcut-btn glass-card">
+                <FolderGit size={15} /> Projects
+              </Link>
+              <Link to="/experiences" className="shortcut-btn glass-card">
+                <Compass size={15} /> Interview Experiences
+              </Link>
+              <Link to="/guidance" className="shortcut-btn glass-card">
+                <HelpCircle size={15} /> Ask Seniors / FAQs
               </Link>
             </div>
           </div>
@@ -237,6 +289,9 @@ const Home = () => {
         .hero-content {
           position: relative;
           z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
 
         .tagline-badge {
@@ -260,6 +315,7 @@ const Home = () => {
           font-weight: 800;
           color: var(--text-primary);
           letter-spacing: -0.02em;
+          text-align: center;
         }
 
         .hero-title span {
@@ -270,10 +326,69 @@ const Home = () => {
 
         .hero-subtitle {
           max-width: 820px;
-          margin: 0 auto 3rem auto;
+          margin: 0 auto 2.5rem auto;
           color: var(--text-secondary);
           font-size: 1.15rem;
           line-height: 1.65;
+          text-align: center;
+        }
+
+        /* Hero Search Bar styles */
+        .hero-search-form {
+          width: 100%;
+          max-width: 620px;
+          margin-bottom: 2.5rem;
+        }
+
+        .hero-search-input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid var(--border-glass);
+          border-radius: 50px;
+          padding: 4px;
+          box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+          backdrop-filter: blur(12px);
+          transition: var(--transition-smooth);
+        }
+
+        .hero-search-input-wrapper:focus-within {
+          border-color: rgba(179, 25, 66, 0.4);
+          box-shadow: 0 8px 32px 0 rgba(179, 25, 66, 0.15);
+        }
+
+        .hero-search-icon {
+          position: absolute;
+          left: 20px;
+          color: var(--text-muted);
+          pointer-events: none;
+        }
+
+        .hero-search-field {
+          width: 100%;
+          height: 48px;
+          background: transparent;
+          border: none;
+          color: var(--text-primary);
+          font-size: 1rem;
+          padding-left: 3.25rem;
+          padding-right: 7.5rem;
+          outline: none;
+        }
+
+        .hero-search-field::placeholder {
+          color: var(--text-muted);
+        }
+
+        .hero-search-btn {
+          position: absolute;
+          right: 6px;
+          height: calc(100% - 12px);
+          padding: 0 1.5rem;
+          border-radius: 40px;
+          font-size: 0.9rem;
+          font-weight: 700;
         }
 
         .hero-cta-group {
@@ -281,6 +396,7 @@ const Home = () => {
           flex-direction: column;
           align-items: center;
           gap: 1.5rem;
+          margin-bottom: 3rem;
         }
 
         .primary-ctas {
@@ -311,6 +427,51 @@ const Home = () => {
 
         .cta-divider {
           color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Top Shortcuts Styles */
+        .shortcuts-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          width: 100%;
+          max-width: 900px;
+        }
+
+        .shortcuts-label {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: var(--text-muted);
+          font-weight: 700;
+        }
+
+        .shortcuts-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          justify-content: center;
+        }
+
+        .shortcut-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.6rem 1.15rem;
+          border-radius: 30px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--text-secondary);
+          text-decoration: none;
+          transition: var(--transition-smooth);
+        }
+
+        .shortcut-btn:hover {
+          transform: translateY(-2px);
+          color: var(--text-primary);
+          border-color: var(--border-glass-focused);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         /* Centered Headers */
@@ -601,6 +762,12 @@ const Home = () => {
           }
           .primary-ctas .btn {
             width: 100%;
+          }
+          .hero-search-field {
+            padding-right: 6.5rem;
+          }
+          .hero-search-btn {
+            padding: 0 1rem;
           }
         }
       `}</style>

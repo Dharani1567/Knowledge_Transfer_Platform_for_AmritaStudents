@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Search, Plus, BookOpen, FileText, Star, Bookmark, Calendar, User, ExternalLink, MessageSquare, CornerDownRight, X, AlertCircle } from 'lucide-react';
 
 const Resources = () => {
   const { token, user, API_BASE } = useAuth();
+  const location = useLocation();
+  
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -47,11 +50,15 @@ const Resources = () => {
   }, [category, search]);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(location.search);
+    const cat = params.get('category') || 'all';
+    const q = params.get('search') || '';
+    setCategory(cat);
+    setSearch(q);
     if (params.get('upload') === 'true' && user) {
       setIsUploadOpen(true);
     }
-  }, [user]);
+  }, [location.search, user]);
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
